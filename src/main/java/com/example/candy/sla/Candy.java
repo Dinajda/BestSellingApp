@@ -1,0 +1,86 @@
+package com.example.candy.sla;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Candy extends BestSelling implements Serializable {
+
+    private static ArrayList<Candy> allCandy = new ArrayList<>();
+
+    private String brand;
+
+    private String country;
+
+
+    public Candy(String name, int year, long sales, String brand, String country) {
+        super(name, year, sales);
+        this.brand = brand;
+        this.country = country;
+    }
+
+    public static ArrayList<Candy> getAllCandy() {
+        return allCandy;
+    }
+
+    public static void setAllCandy(ArrayList<Candy> allCandy) {
+        Candy.allCandy = allCandy;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return " The best selling item is " + getName() + ". This candy was made by " + brand +
+                " in " + country + ". It was made in " + getYear() + ". It had " + getSales() + " sales."
+                ;
+    }
+    public static void eat() {
+        Scanner sc = null;
+        try {
+            File text = new File("Candy");
+            sc = new Scanner(text);
+            String line;
+            while (sc.hasNextLine()) {
+                line = sc.nextLine();
+                System.out.println(line);
+                Scanner lineScanner = new Scanner(line);
+                lineScanner.useDelimiter("\t");
+                String country = lineScanner.next();
+                String brand = lineScanner.next();
+                String name = lineScanner.next();
+                long sales = lineScanner.nextLong();
+                int year = lineScanner.nextInt();
+                new Candy(name,year,sales,brand,country);
+
+
+
+                while(lineScanner.hasNext()) {
+                    String chunkoData = lineScanner.next();
+                    System.out.println(chunkoData);
+                }
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (sc != null) sc.close();
+        }
+    }
+}
